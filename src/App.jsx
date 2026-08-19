@@ -145,14 +145,8 @@ export default function App() {
     const code = editorRef.current?.getCode() ?? ''
     if (!code.trim()) return
     const prompts = extractPrompts(code)
-    if (prompts.length > 0) {
-      const preloaded = currentLesson?.test?.inputs
-      if (preloaded && preloaded.length >= prompts.length) {
-        execute(code, preloaded)
-      } else {
-        setPendingCode(code); setInputPrompts(prompts); setCollecting(true)
-      }
-    } else execute(code, [])
+    if (prompts.length > 0) { setPendingCode(code); setInputPrompts(prompts); setCollecting(true) }
+    else execute(code, [])
   }, [isReady, execute, currentLesson])
 
   const handleInputsSubmit = useCallback((values) => { setCollecting(false); execute(pendingCode, values) }, [pendingCode, execute])
