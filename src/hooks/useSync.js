@@ -23,7 +23,7 @@ export async function pullAndMergeProgress(userId) {
   if (!hasSupabase || !userId) return null
   const { data, error } = await supabase
     .from('user_progress')
-    .select('*')
+    .select('id, xp, completed_lessons, solved_challenges, streak, longest_streak, last_active_date')
     .eq('id', userId)
     .single()
   if (error || !data) return null

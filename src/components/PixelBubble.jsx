@@ -176,12 +176,10 @@ export function PixelBubble({ error, code }) {
 
         {aiError && (
           <div className="pixel-ai-error">
-            {aiError === 'no_key'      && '💡 Add VITE_GEMINI_API_KEY to your .env file to enable AI answers.'}
-            {aiError === 'invalid_key' && '🔑 API key looks wrong. Check your .env file and restart the dev server.'}
-            {aiError === 'network'     && "🌐 Couldn't reach Gemini — check your internet connection and try again."}
-            {aiError === 'rate_limit'  && '⏳ Gemini API rate limit hit — wait a minute and try again.'}
-            {(aiError === 'api_error' || aiError?.startsWith('api_error:')) && '⚠️ Gemini API error — your API key may be invalid or expired. Check VITE_GEMINI_API_KEY in .env.'}
-            {aiError === 'limit'       && '🐍 You\'ve used all 10 questions for today — come back tomorrow!'}
+            {aiError === 'network'    && "🌐 Couldn't reach the AI service — check your internet connection and try again."}
+            {aiError === 'rate_limit' && '⏳ You have used all your questions for today — come back tomorrow!'}
+            {aiError === 'api_error'  && '⚠️ AI service is temporarily unavailable — please try again in a moment.'}
+            {aiError === 'limit'      && '🐍 You\'ve used all 10 questions for today — come back tomorrow!'}
           </div>
         )}
 

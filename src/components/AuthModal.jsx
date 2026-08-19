@@ -67,6 +67,9 @@ export function AuthModal({ onClose, auth }) {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   maxLength={20}
+                  minLength={2}
+                  pattern="[a-zA-Z0-9_]+"
+                  title="2-20 characters: letters, numbers, underscores only"
                   required
                 />
               </div>

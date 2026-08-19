@@ -87,7 +87,12 @@ export const Editor = forwardRef(function Editor({ onRun, initialCode, storageKe
             ...historyKeymap,
           ]),
           EditorView.updateListener.of((u) => {
-            if (u.docChanged && storageKey) localStorage.setItem(storageKey, u.state.doc.toString())
+            if (u.docChanged && storageKey) {
+              const content = u.state.doc.toString()
+              if (content.length <= 50000) {
+                try { localStorage.setItem(storageKey, content) } catch {}
+              }
+            }
           }),
           EditorView.lineWrapping,
         ],

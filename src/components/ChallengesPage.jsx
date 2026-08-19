@@ -6,12 +6,12 @@ const DIFF_COLOR = { easy: 'green', medium: 'yellow', hard: 'red' }
 const DIFF_LABEL = { easy: 'Easy', medium: 'Medium', hard: 'Hard' }
 
 function buildTestCode(userCode, testCases) {
-  const cases = JSON.stringify(testCases)
+  const cases = btoa(JSON.stringify(testCases))
   return `${userCode}
 
-import json as _json
+import json as _json, base64 as _b64
 _results = []
-_test_cases = _json.loads('''${cases}''')
+_test_cases = _json.loads(_b64.b64decode('${cases}').decode())
 for _tc in _test_cases:
     try:
         _got = solution(*_tc["args"])
