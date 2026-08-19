@@ -2275,6 +2275,37 @@ body {
   line-height: 1.5;
 }
 
+/* ── TEST HINT ─────────────────────────────────────────────── */
+.test-hint {
+  margin-top: 10px;
+  padding: 12px 14px;
+  background: rgba(255, 170, 0, .08);
+  border-left: 3px solid #ffaa00;
+  border-radius: 0 6px 6px 0;
+  font-size: .82rem;
+  line-height: 1.6;
+}
+.test-hint-title {
+  font-weight: 600;
+  color: #ffaa00;
+  margin-bottom: 6px;
+}
+.test-hint-item {
+  color: var(--text);
+  margin: 2px 0;
+}
+.test-hint-item code {
+  background: rgba(255,255,255,.08);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-family: monospace;
+}
+.test-hint-sub {
+  margin-top: 6px;
+  color: var(--text-muted);
+  font-size: .78rem;
+}
+
 /* ── SIGN-IN NUDGE BANNER ──────────────────────────────────── */
 .signin-nudge {
   position: sticky;

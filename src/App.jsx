@@ -40,6 +40,11 @@ function checkTest(test, stdout, error) {
   return true
 }
 
+function getMissingStrings(test, stdout) {
+  if (!test?.contains?.length) return []
+  return test.contains.filter((s) => !stdout.includes(s))
+}
+
 export default function App() {
   const editorRef     = useRef(null)
   const bodyRef       = useRef(null)
@@ -76,6 +81,7 @@ export default function App() {
   const [showRetrieval,     setShowRetrieval]    = useState(false)
   const [nudgeDismissed,    setNudgeDismissed]   = useState(false)
   const [beginnerTip,       setBeginnerTip]      = useState(null)
+  const [testHint,          setTestHint]         = useState(null)
 
   const { status, loadingMsg, loadingProgress, workerStatus, runCode, isLoading, isRunning, isReady } = usePyodide()
   const { xp, completedLessons, currentLessonId, levelInfo, solvedChallenges, streak,
@@ -110,7 +116,7 @@ export default function App() {
   }, [])
 
   const execute = useCallback(async (code, inputs = []) => {
-    setOutput(''); setError(null); setPlots([]); setLastRunOk(false); setBeginnerTip(null)
+    setOutput(''); setError(null); setPlots([]); setLastRunOk(false); setBeginnerTip(null); setTestHint(null)
     const result = await runCode(code, inputs)
     if (!result) return
     const stdout = result.stdout ?? ''
@@ -136,6 +142,11 @@ export default function App() {
             ?? FALLBACK_QUIZZES[Math.floor(completedLessons.size / 3) % FALLBACK_QUIZZES.length]
           setPendingRetrieval(quiz)
         }
+      } else if (!err && currentLesson.test?.contains?.length) {
+        const missing = getMissingStrings(currentLesson.test, stdout)
+        if (missing.length > 0) {
+          setTestHint({ missing })
+        }
       }
     }
   }, [runCode, currentLesson, completedLessons, xp, levelInfo, completeLesson])
@@ -159,7 +170,7 @@ export default function App() {
 
   const handleSelectLesson = useCallback((lessonId) => {
     setCurrentLesson(lessonId)
-    setOutput(''); setError(null); setPlots([]); setLastRunOk(false); setBeginnerTip(null); setWinning(null)
+    setOutput(''); setError(null); setPlots([]); setLastRunOk(false); setBeginnerTip(null); setTestHint(null); setWinning(null)
     setLessonMode(completedLessons.has(lessonId) ? 'practice' : 'learn')
     const lesson = getLessonById(lessonId)
     const code = lesson?.tutorial?.[0]?.code ?? lesson?.starterCode ?? ''
@@ -274,7 +285,7 @@ export default function App() {
                     document.addEventListener('mousemove', onMove); document.addEventListener('mouseup', onUp)
                   }} />
                   <div className="output-pane">
-                    <OutputPanel output={output} error={error} plots={plots} isRunning={isRunning} workerStatus={workerStatus} lastRunOk={lastRunOk} beginnerTip={beginnerTip}>
+                    <OutputPanel output={output} error={error} plots={plots} isRunning={isRunning} workerStatus={workerStatus} lastRunOk={lastRunOk} beginnerTip={beginnerTip} testHint={testHint}>
                       {error && <PixelBubble error={error} code={editorRef.current?.getCode() ?? ''} />}
                     </OutputPanel>
                   </div>

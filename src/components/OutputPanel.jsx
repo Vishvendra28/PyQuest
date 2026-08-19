@@ -1,4 +1,4 @@
-export function OutputPanel({ output, error, plots, isRunning, workerStatus, lastRunOk, beginnerTip, children }) {
+export function OutputPanel({ output, error, plots, isRunning, workerStatus, lastRunOk, beginnerTip, testHint, children }) {
   const hasContent = output || error || plots.length > 0
 
   return (
@@ -55,6 +55,16 @@ export function OutputPanel({ output, error, plots, isRunning, workerStatus, las
 
         {beginnerTip && (
           <div className="beginner-tip">{beginnerTip}</div>
+        )}
+
+        {testHint && (
+          <div className="test-hint">
+            <div className="test-hint-title">🎯 Almost there! Your output is missing:</div>
+            {testHint.missing.map((s, i) => (
+              <div key={i} className="test-hint-item">→ <code>{s}</code></div>
+            ))}
+            <div className="test-hint-sub">Check your spelling, spaces, and punctuation exactly.</div>
+          </div>
         )}
 
         {children}
