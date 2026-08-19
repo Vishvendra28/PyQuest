@@ -26,7 +26,7 @@ export function useAuth() {
   }, [])
 
   const fetchProfile = async (userId) => {
-    const { data } = await supabase.from('profiles').select('*').eq('id', userId).single()
+    const { data } = await supabase.from('profiles').select('id, username, created_at').eq('id', userId).single()
     setProfile(data)
     setAuthLoading(false)
   }

@@ -87,8 +87,14 @@ _bi.input = _pyquest_input
     self.postMessage({ type: 'status', message: '' })
   }
 
+  const TIMEOUT_MS = 8000
   try {
-    await pyodide.runPythonAsync(code)
+    await Promise.race([
+      pyodide.runPythonAsync(code),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('TimeoutError: Code ran for more than 8 seconds — check for infinite loops!')), TIMEOUT_MS)
+      ),
+    ])
     self.postMessage({ type: 'result', id, stdout: stdoutParts.join('\n'), error: null, plots })
   } catch (err) {
     self.postMessage({ type: 'result', id, stdout: stdoutParts.join('\n'), error: cleanError(err.message || String(err)), plots })
